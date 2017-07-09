@@ -2,19 +2,32 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <algorithm>
+
 
 using namespace std;
+
+struct StudentMarks {
+	string Subject;
+	double Mark;
+};
 
 class Student {
 
 private:
-	int Age;
 	string Name;
+	int Age;
+
+
+	StudentMarks studentMarks[2];
 
 public:
 	//	Student(int age, string name);
-	void ReadInput();
+	void ReadStudentBaseInfo();
 	string GetName();
+
+	void InputStudentMarks();
+	void GetStudentMarks();
 	//void Get() const;
 	void WriteInFile();
 	//void ReadFromFile();
@@ -24,25 +37,48 @@ public:
 int main() {
 
 	Student student;
-	student.ReadInput();
+	student.ReadStudentBaseInfo();
 
 	cout << "Student name is: " << student.GetName();
 
-	student.WriteInFile();
 
+	student.InputStudentMarks();
+	student.GetStudentMarks();
+
+	student.WriteInFile();
 
 	system("pause");
 
 	return -1;
 }
 
-void Student::ReadInput()
+void Student::ReadStudentBaseInfo()
 {
 	cout << "What is student name?\n";
 	cin >> Name;
 
 	cout << "What is student age?\n";
 	cin >> Age;
+}
+
+void Student::InputStudentMarks() {
+
+	for (int i = 0; i < 2; i++) {
+		cout << "\nSubject name: ";
+		cin >> studentMarks[i].Subject;
+
+		cout << "Mark: ";
+		cin >> studentMarks[i].Mark;
+	}
+}
+
+void Student::GetStudentMarks() {
+
+	cout << "\n\n" << GetName() << "\nMarks: \n";
+
+	for (int i = 0; i < 2; i++) {
+		cout << "\n - " << studentMarks[i].Subject << " -- " << studentMarks[i].Mark;
+	}
 }
 
 string Student::GetName() {
@@ -64,5 +100,9 @@ void Student::WriteInFile() {
 
 	myfile << "Writing this to a file.\n";
 	myfile << "Student name: " << Name << "\n";
+	myfile << "Student age: " << Age << "\n";
+	for (int i = 0; i < 2; i++) {
+		myfile << "\n - " << studentMarks[i].Subject << " -- " << studentMarks[i].Mark;
+	}
 	myfile.close();
 }
