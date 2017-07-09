@@ -2,8 +2,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <algorithm>
-
 
 using namespace std;
 
@@ -12,53 +10,63 @@ struct StudentMarks {
 	double Mark;
 };
 
-class Student {
-
-private:
+class Person {
+protected:
 	string Name;
 	int Age;
 
+public:
+	void InputPersonData();
+};
 
+class Student : public Person {
+
+private:
+	char StudentNumber[5];
 	StudentMarks studentMarks[2];
 
+	friend istream& operator>>(istream&, Person&);
+
 public:
-	//	Student(int age, string name);
-	void ReadStudentBaseInfo();
-	string GetName();
+	void InputStudentBaseInfo();
+	string GetName() const;
 
 	void InputStudentMarks();
-	void GetStudentMarks();
-	//void Get() const;
-	void WriteInFile();
-	//void ReadFromFile();
+	void GetStudentMarks() const;
+	void SaveInFile();
 
 };
 
 int main() {
 
 	Student student;
-	student.ReadStudentBaseInfo();
 
-	cout << "Student name is: " << student.GetName();
-
-
+	student.InputPersonData();
+	student.InputStudentBaseInfo();
 	student.InputStudentMarks();
-	student.GetStudentMarks();
 
-	student.WriteInFile();
+	student.SaveInFile();
 
 	system("pause");
 
 	return -1;
 }
 
-void Student::ReadStudentBaseInfo()
-{
-	cout << "What is student name?\n";
+void Person::InputPersonData() {
+	cout << "What is person name?\n";
 	cin >> Name;
 
-	cout << "What is student age?\n";
-	cin >> Age;
+	do
+	{
+		cout << "What is person age?\n";
+		cin >> Age;
+	} while (Age <= 18 || Age >= 65);
+
+}
+void Student::InputStudentBaseInfo()
+{
+	cout << "What is student number?\n";
+	cin >> StudentNumber;
 }
 
 void Student::InputStudentMarks() {
@@ -72,7 +80,7 @@ void Student::InputStudentMarks() {
 	}
 }
 
-void Student::GetStudentMarks() {
+void Student::GetStudentMarks() const {
 
 	cout << "\n\n" << GetName() << "\nMarks: \n";
 
@@ -81,14 +89,14 @@ void Student::GetStudentMarks() {
 	}
 }
 
-string Student::GetName() {
+string Student::GetName() const {
 	return Name;
 }
 
-void Student::WriteInFile() {
+void Student::SaveInFile() {
 	ofstream myfile;
 	string fileName;
-	cout << "\nWrite the name of file:";
+	cout << "\nWrite the name of file: ";
 	cin >> fileName;
 
 	myfile.open(fileName + ".txt");
@@ -106,3 +114,10 @@ void Student::WriteInFile() {
 	}
 	myfile.close();
 }
+
+
+//istream& operator>> (istream& is, Date& dt)
+//{
+//	is >> dt.mo >> dt.da >> dt.yr;
+//	return is;
+//}
